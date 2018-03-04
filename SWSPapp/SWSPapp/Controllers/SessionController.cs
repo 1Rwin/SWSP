@@ -23,7 +23,7 @@ namespace SWSPapp.Controllers
             if(user != null)
             {
                 SessionPersister.User = user;
-                return RedirectToAction("Stats", "Session");
+                return RedirectToAction("Index", "Stats");
             }
             else
             {
@@ -31,6 +31,11 @@ namespace SWSPapp.Controllers
                 return View(user);
             }
            
+        }
+        public ActionResult Logout()
+        {
+            SessionPersister.User = null;
+            return RedirectToAction("Index", "Home");
         }
 
 
