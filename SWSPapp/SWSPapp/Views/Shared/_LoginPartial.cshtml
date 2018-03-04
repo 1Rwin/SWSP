@@ -1,0 +1,21 @@
+﻿@using SWSPapp.Services
+@if (SessionPersister.User != null)
+{
+    using (Html.BeginForm("Logout", "Session", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                @Html.ActionLink("Witaj " + SessionPersister.User.Login + "!", "Index", "Home", routeValues: null, htmlAttributes: new { title = "Manage" })
+            </li>
+            <li><a href=@Url.Action("Logout", "Session")>Wyloguj</a></li>
+        </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">      
+        <li>@Html.ActionLink("Zaloguj", "Login", "Session", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}
