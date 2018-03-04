@@ -12,8 +12,12 @@
     <a class="btn btn-primary" href="stats/OldReport" role="button">Historia Raportów</a>
 </div>
 
-
 <div class="container">
+    <br />
+    <br />
+    <a class="btn btn-primary btn-lg btn-block" href="@Url.Action("OldReport")">Old report</a>
+
+
     <h2>Statystyka</h2>
     <canvas id="myChart"></canvas>
 </div>
@@ -22,35 +26,78 @@
 {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     <script type="text/javascript">
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var chart = new Chart(ctx, {
-            // The type of chart we want to create
-            type: 'line',
+        $(function () {
+        $.ajax({
+            url: '@Url.Action("GetStats","Stats")',
+            type: "GET",
+            data: { idPlayer: 1 },
+            success: function (response) {
 
-            // The data for our dataset
-            data: {
-                labels: ["January", "February", "March", "April", "May", "June", "July"],
-                datasets: [
-                    {
-                        label: "My First dataset",
-                        fill: false,
-                        lineTension: 0,
-                        borderColor: 'rgb(255, 99, 132)',
-                        data: [0, 10, 5, 2, 20, 30, 45],
+                var dates = [];
+                var attackData = [];
+                var dribblingData = [];
+                var speedData = [];
+                var passingData = [];
+
+                for (i = 0; i < response.length; i++) {        
+
+                    var fullDate = new Date(parseInt(response[i].Date.substr(6)));
+                    var month = fullDate.getMonth() + 1;
+                    var year = fullDate.getFullYear();
+                    dates.push(year + "/" + month);
+                    attackData.push(response[i].Attack);
+                    dribblingData.push(response[i].Dribble);
+                    speedData.push(response[i].Speed);
+                    passingData.push(response[i].Passing);
+                }
+
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                    // The type of chart we want to create
+                    type: 'line',
+
+                    // The data for our dataset
+                    data: {
+                        labels: dates,
+                        datasets: [
+                            {
+                                label: "Attack",
+                                fill: false,
+                                lineTension: 0,
+                                borderColor: 'rgb(255, 99, 132)',
+                                data: attackData,
+                            },
+                            {
+                                label: "Dribble",
+                                fill: false,
+                                lineTension: 0,
+                                borderColor: 'rgb(100, 50, 123)',
+                                data: dribblingData,
+                            },
+                            {
+                                label: "Speed",
+                                fill: false,
+                                lineTension: 0,
+                                borderColor: 'rgb(50, 100, 123)',
+                                data: speedData,
+                            },
+                            {
+                                label: "Passing",
+                                fill: false,
+                                lineTension: 0,
+                                borderColor: 'rgb(10, 45, 123)',
+                                data: passingData,
+                            }
+                        ]
                     },
-                    {
-                        label: "My Second dataset",
-                        fill: false,
-                        lineTension: 0,
-                        borderColor: 'rgb(0, 245, 123)',
-                        data: [3, 12, 3, 12, 18, 20, 19],
-                    },
-                ]
+                    // Configuration options go here
+                    options: {}
+                });
             },
-
-            // Configuration options go here
-            options: {}
+            error: function (xhr) {
+                alert("Coś poszło nie tak")
+            }
+            });
         });
     </script>
-
 }
