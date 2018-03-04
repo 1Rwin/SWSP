@@ -162,6 +162,7 @@
     <Compile Include="Context\SWSPContext.cs" />
     <Compile Include="Context\User.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SearchPlayerController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\StatsController.cs" />
     <Compile Include="Global.asax.cs">
@@ -213,6 +214,9 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Session\Login.cshtml" />
     <Content Include="Views\Stats\Index.cshtml" />
+    <Content Include="Views\Stats\OldReport.cshtml" />
+    <Content Include="Views\SearchPlayer\SearchPlayer.cshtml" />
+    <Content Include="Views\Stats\NewReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
