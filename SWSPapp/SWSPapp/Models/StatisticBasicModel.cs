@@ -15,6 +15,6 @@ namespace SWSPapp.Models
         public int Dribble { get; set; }
         public int Deffence { get; set; }
         public int Strength { get; set; }
-
+        public string PlayerName { get;  set; }
     }
 }

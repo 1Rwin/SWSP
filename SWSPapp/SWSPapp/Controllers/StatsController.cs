@@ -17,8 +17,15 @@ namespace SWSPapp.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetStats(int idPlayer = 1)
+        public JsonResult GetStats2(int idPlayer = 1)
         {
+            var data = new StatisticsService().GetReportForPlayerLineChart(idPlayer);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetStats(int idPlayer = 1)
+        {   
             var data = new StatisticsService().GetReportForPlayer(idPlayer);
             return Json(data, JsonRequestBehavior.AllowGet);
         }

@@ -39,8 +39,8 @@
         var chart = null;
         $(function () {
 
-            var firstPlayer = { attack: 0, dribbling: 0, speed: 0, passing: 0,deffence: 0, strength: 0 , idP: 0 };
-            var secondPlayer = { attack: 0, dribbling: 0, speed: 0, passing: 0, deffence:0, strength:0, idP: 0 };
+            var firstPlayer = { attack: 0, dribbling: 0, speed: 0, passing: 0,deffence: 0, strength: 0 , idP: 0, name: "" };
+            var secondPlayer = { attack: 0, dribbling: 0, speed: 0, passing: 0, deffence:0, strength:0, idP: 0, name: "" };
 
             getPlayerStats($("#firstPlayerlist").val(), $("#secondPlayerlist").val());
 
@@ -68,6 +68,7 @@
                             firstPlayer.passing = response[i].Passing;
                             firstPlayer.strength = response[i].Strength;
                             firstPlayer.deffence = response[i].Deffence;
+                            firstPlayer.name = response[i].PlayerName;
 
                         }
                     }, error: function (xhr) {
@@ -90,6 +91,7 @@
                             secondPlayer.passing = response[i].Passing;
                             secondPlayer.strength = response[i].Strength;
                             secondPlayer.deffence = response[i].Deffence;
+                            secondPlayer.name = response[i].PlayerName;
 
                         }
                     },error: function (xhr) {
@@ -110,7 +112,7 @@
                         labels : ['Attack', 'Dribble', 'Speed', 'Passing', 'Deffence' ,'Strength'],
                         datasets: [
                             {
-                                label: idPlayer,
+                                label: firstPlayer.name,
                                 backgroundColor: "transparent",
                                 borderColor: "rgba(200,0,0,0.6)",
                                 fill: false,
@@ -123,7 +125,7 @@
                                 data: [firstPlayer.attack, firstPlayer.dribbling, firstPlayer.passing, firstPlayer.speed, firstPlayer.deffence, firstPlayer.strength]
                             },
                             {
-                                label: ndPlayer,
+                                label: secondPlayer.name,
                                 backgroundColor: "transparent",
                                 borderColor: "rgba(50,0,0,0.6)",
                                 fill: false,
@@ -150,8 +152,6 @@
                             display: true
                         }
                     }
-
-
             });
           }
 

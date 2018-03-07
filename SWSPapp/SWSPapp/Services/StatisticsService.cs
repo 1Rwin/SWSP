@@ -16,6 +16,7 @@ namespace SWSPapp.Services
                 new StatisticBasicModel()
                 {
                     IdPlayer = 1,
+                    PlayerName = "Messi",
                     Passing = 85,
                     Dribble = 90,
                     Speed = 85,
@@ -26,6 +27,7 @@ namespace SWSPapp.Services
                 new StatisticBasicModel()
                 {
                     IdPlayer = 2,
+                    PlayerName = "Cristiano Ronaldo",
                     Passing = 77,
                     Dribble = 100,
                     Speed = 99,
@@ -36,21 +38,24 @@ namespace SWSPapp.Services
             };
 
             return list.Where(x => x.IdPlayer == idPlayer).ToList();
+        }
 
-            //using (SWSPContext context = new SWSPContext())
-            //{
-            //    var data = context.player_statistic_changes.Where(x => x.id_player == idPlayer).ToList();
-            //    return data.Select(x => new StatisticBasicModel
-            //    {
-            //        IdPlayer = x.id_player.Value,
-            //        Passing = x.passing.Value,
-            //        Dribble = x.dribble.Value,
-            //        Speed = x.speed.Value,
-            //        Attack = x.attack.Value,
-            //        Date = x.date.Value
+        public List <StatisticBasicModel> GetReportForPlayerLineChart(int idPlayer)
+        {
+            using (SWSPContext context = new SWSPContext())
+            {
+                var data = context.player_statistic_changes.Where(x => x.id_player == idPlayer).ToList();
+                return data.Select(x => new StatisticBasicModel
+                {
+                    IdPlayer = x.id_player.Value,
+                    Passing = x.passing.Value,
+                    Dribble = x.dribble.Value,
+                    Speed = x.speed.Value,
+                    Attack = x.attack.Value,
+                    Date = x.date.Value
 
-            //    }).ToList();
-            //}
+                }).ToList();
+            }
         }
 
     }
