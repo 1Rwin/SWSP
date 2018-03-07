@@ -3,9 +3,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <br>
-<div class="="container">
-<a class="btn btn-primary" href="stats/NewReport" role="button">Nowy raport</a>
-<a class="btn btn-primary" href="SearchPlayer/SearchPlayer" role="button">Wyszukaj zawodnika</a>
+<div class="=" container">
+    <a class="btn btn-primary" href="stats/NewReport" role="button">Nowy raport</a>
+    <a class="btn btn-primary" href="SearchPlayer/SearchPlayer" role="button">Wyszukaj zawodnika</a>
 </div>
 <br>
 <div class="=" container">
@@ -39,7 +39,7 @@
                 var speedData = [];
                 var passingData = [];
 
-                for (i = 0; i < response.length; i++) {        
+                for (i = 0; i < response.length; i++) {
 
                     var fullDate = new Date(parseInt(response[i].Date.substr(6)));
                     var month = fullDate.getMonth() + 1;
@@ -52,7 +52,7 @@
                 }
 
                 var ctx = document.getElementById('myChart').getContext('2d');
-                var chart = new Chart(ctx, {
+                chart = new Chart(ctx, {
                     // The type of chart we want to create
                     type: 'line',
 

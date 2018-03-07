@@ -13,7 +13,8 @@ namespace SWSPapp.Models
         public int Attack { get; set; }
         public int Passing { get; set; }
         public int Dribble { get; set; }
-
+        public int Deffence { get; set; }
+        public int Strength { get; set; }
 
     }
 }

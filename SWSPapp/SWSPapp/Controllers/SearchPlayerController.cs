@@ -28,28 +28,33 @@ namespace SWSPapp.Controllers
 
         public List<SearchPlayerController> GetPalyerStats(string search, string sort, string sortdir, int skip, int pagesize, out int totalRecord)
         {
-            using (SWSPContext db = new SWSPContext())
-            {
-                var v = (from a in db.players_statistics
-                         where
-                         a.attack.ToString().Contains(search) ||
-                         a.speed.ToString().Contains(search) ||
-                         a.weight.ToString().Contains(search) ||
-                         a.height.ToString().Contains(search) ||
-                         a.dribble.ToString().Contains(search) ||
-                         a.passing.ToString().Contains(search) ||
-                         a.defense.ToString().Contains(search) ||
-                         a.endurance.ToString().Contains(search)
+            totalRecord = 0;
+            return null;
 
-                         select a);
-                totalRecord = v.Count();
-                v = v.OrderBy(sort + "" + sortdir);
-                if (pagesize >0)
-                {
-                    v = v.Skip(skip).Take(pagesize);
-                }
-                return v.ToList();
-            }
+            //nie commituj nie kompilującego się kodu
+
+            //using (SWSPContext db = new SWSPContext())
+            //{
+            //    var v = (from a in db.players_statistics
+            //             where
+            //             a.attack.ToString().Contains(search) ||
+            //             a.speed.ToString().Contains(search) ||
+            //             a.weight.ToString().Contains(search) ||
+            //             a.height.ToString().Contains(search) ||
+            //             a.dribble.ToString().Contains(search) ||
+            //             a.passing.ToString().Contains(search) ||
+            //             a.defense.ToString().Contains(search) ||
+            //             a.endurance.ToString().Contains(search)
+
+            //             select a);
+            //    totalRecord = v.Count();
+            //    v = v.OrderBy(sort + "" + sortdir);
+            //    if (pagesize >0)
+            //    {
+            //        v = v.Skip(skip).Take(pagesize);
+            //    }
+            //    return v.ToList();
+            //}
         }
     }
 }

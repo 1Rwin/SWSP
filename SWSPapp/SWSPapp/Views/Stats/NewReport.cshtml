@@ -1,1 +1,160 @@
-﻿
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <br />
+    <h2>Statystyka</h2>
+    <br />
+
+    <div class="form-horizontal">
+        <div class="row">
+            @Html.Label("1-st player", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                <select id="firstPlayerlist" class="form-control">
+                    <option value="1">Messi</option>
+                    <option value="2">Ronaldo</option>
+                </select>
+            </div>
+            @Html.Label("2-nd player", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                <select id="secondPlayerlist" class="form-control">
+                    <option value="1">Messi</option>
+                    <option value="2">Ronaldo</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="col-md-offset-3">
+        <canvas id="myChart" height="500" width="500"></canvas>
+    </div>
+</div>
+
+@section scripts
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script type="text/javascript">
+        var chart = null;
+        $(function () {
+
+            var firstPlayer = { attack: 0, dribbling: 0, speed: 0, passing: 0,deffence: 0, strength: 0 , idP: 0 };
+            var secondPlayer = { attack: 0, dribbling: 0, speed: 0, passing: 0, deffence:0, strength:0, idP: 0 };
+
+            getPlayerStats($("#firstPlayerlist").val(), $("#secondPlayerlist").val());
+
+            $("#firstPlayerlist").change(function () {
+                getPlayerStats($("#firstPlayerlist").val(), $("#secondPlayerlist").val());
+            });
+
+            $("#secondPlayerlist").change(function () {
+                getPlayerStats($("#firstPlayerlist").val(),$("#secondPlayerlist").val());
+            });
+
+            function getPlayerStats(idPlayer, ndPlayer) {
+                $.ajax({
+                    url: '@Url.Action("GetStats", "Stats")',
+                    type: "GET",
+                    async: false,
+                    data: { idPlayer: idPlayer },
+                    success: function (response) {
+
+                        for (i = response.length - 1; i > -1; i--) {
+                            firstPlayer.idP = idPlayer;
+                            firstPlayer.attack = response[i].Attack;
+                            firstPlayer.dribbling = response[i].Dribble;
+                            firstPlayer.speed = response[i].Speed;
+                            firstPlayer.passing = response[i].Passing;
+                            firstPlayer.strength = response[i].Strength;
+                            firstPlayer.deffence = response[i].Deffence;
+
+                        }
+                    }, error: function (xhr) {
+                        alert("Coś poszło nie tak")
+                    }
+                });
+
+                $.ajax({
+                    url: '@Url.Action("GetStats", "Stats")',
+                    type: "GET",
+                    async: false,
+                    data: { idPlayer: ndPlayer },
+                    success: function (response) {
+
+                        for (i = response.length - 1; i > -1; i--) {
+                            secondPlayer.idP = ndPlayer;
+                            secondPlayer.attack = response[i].Attack;
+                            secondPlayer.dribbling = response[i].Dribble;
+                            secondPlayer.speed = response[i].Speed;
+                            secondPlayer.passing = response[i].Passing;
+                            secondPlayer.strength = response[i].Strength;
+                            secondPlayer.deffence = response[i].Deffence;
+
+                        }
+                    },error: function (xhr) {
+                    alert("Coś poszło nie tak")
+                    }
+                });
+
+                var ctx = document.getElementById('myChart').getContext('2d');
+                if (chart != null) {
+                    chart.destroy();
+                }
+                chart = new Chart(ctx, {
+                    // The type of chart we want to create
+                    type: 'radar',
+
+                    // The data for our dataset
+                    data: {
+                        labels : ['Attack', 'Dribble', 'Speed', 'Passing', 'Deffence' ,'Strength'],
+                        datasets: [
+                            {
+                                label: idPlayer,
+                                backgroundColor: "transparent",
+                                borderColor: "rgba(200,0,0,0.6)",
+                                fill: false,
+                                radius: 6,
+                                pointRadius: 6,
+                                pointBorderWidth: 3,
+                                pointBackgroundColor: "orange",
+                                pointBorderColor: "rgba(200,0,0,0.6)",
+                                pointHoverRadius: 10,
+                                data: [firstPlayer.attack, firstPlayer.dribbling, firstPlayer.passing, firstPlayer.speed, firstPlayer.deffence, firstPlayer.strength]
+                            },
+                            {
+                                label: ndPlayer,
+                                backgroundColor: "transparent",
+                                borderColor: "rgba(50,0,0,0.6)",
+                                fill: false,
+                                radius: 6,
+                                pointRadius: 6,
+                                pointBorderWidth: 3,
+                                pointBackgroundColor: "orange",
+                                pointBorderColor: "rgba(50,0,0,0.6)",
+                                pointHoverRadius: 10,
+                                data: [secondPlayer.attack, secondPlayer.dribbling, secondPlayer.passing, secondPlayer.speed, secondPlayer.deffence, secondPlayer.strength]
+                            }
+                        ]
+                    },
+                    // Configuration options go here
+                    options: {
+                        pointDot: false,
+                        showTooltips: false,
+                        scaleOverride: true,
+                        scaleSteps: 4,
+                        scaleStepWidth: 5,
+                        scaleStartValue: 0,
+                        responsive: false,
+                        scale: {
+                            display: true
+                        }
+                    }
+
+
+            });
+          }
+
+        });
+    </script>
+}
