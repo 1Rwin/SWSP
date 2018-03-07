@@ -8,9 +8,8 @@ namespace SWSPapp.Services
 {
     public class StatisticsService
     {
-        public List<StatisticBasicModel> GetReportForPlayer(int idPlayer)
+        public StatisticBasicModel GetReportForPlayer(int idPlayer)
         {
-
             var list = new  List<StatisticBasicModel>()
             {
                 new StatisticBasicModel()
@@ -37,7 +36,7 @@ namespace SWSPapp.Services
                 }
             };
 
-            return list.Where(x => x.IdPlayer == idPlayer).ToList();
+            return list.FirstOrDefault(x => x.IdPlayer == idPlayer);
         }
 
         public List <StatisticBasicModel> GetReportForPlayerLineChart(int idPlayer)

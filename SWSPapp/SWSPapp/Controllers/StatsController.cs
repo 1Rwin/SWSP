@@ -28,13 +28,7 @@ namespace SWSPapp.Controllers
         {   
             var data = new StatisticsService().GetReportForPlayer(idPlayer);
             return Json(data, JsonRequestBehavior.AllowGet);
-        }
-
-        //public JsonResult GetStatsForPlayers(int idFirstPlayer, int idSecondPlayer)
-        //{
-        //    var data = new StatisticsService().GetReportForPlayers(idFirstPlayer, idSecondPlayer);
-        //    return Json(data, JsonRequestBehavior.AllowGet);
-        //}
+        }     
 
         public ActionResult OldReport()
         {
