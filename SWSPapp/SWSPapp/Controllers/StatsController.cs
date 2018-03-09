@@ -15,7 +15,7 @@ namespace SWSPapp.Controllers
         {
             return View();
         }
-
+        [Auth]
         [HttpGet]
         public JsonResult GetStats2(int idPlayer = 1)
         {
@@ -23,20 +23,24 @@ namespace SWSPapp.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
+        [Auth]
         [HttpGet]
         public JsonResult GetStats(int idPlayer = 1)
-        {   
+        {
             var data = new StatisticsService().GetReportForPlayer(idPlayer);
             return Json(data, JsonRequestBehavior.AllowGet);
-        }     
+        }
+
+        [Auth]
+        public ActionResult NewReport()
+        {
+            return View();
+        }
 
         public ActionResult OldReport()
         {
             return View();
         }
-        public ActionResult NewReport()
-        {
-            return View();
-        }
+
     }
 }

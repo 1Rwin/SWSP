@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using SWSPapp.Services;
 using System.Web.Mvc;
 
 namespace SWSPapp.Controllers
@@ -16,8 +13,29 @@ namespace SWSPapp.Controllers
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
-
             return View();
+        }
+
+        [Auth]
+        public ActionResult Search()
+        {
+            var data = new StatisticsService().GetPlayersInfo();
+            return View(data);
+        }
+
+        [HttpPost]
+        public void AddFavorite(int idPlayer)
+        {
+            //update favorite
+         
+          
+        }
+
+        [HttpPost]
+        public void RemoveFavorite(int idPlayer)
+        {
+            //update favorite 
+
         }
 
     }

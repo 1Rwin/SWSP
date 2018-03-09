@@ -15,7 +15,7 @@ namespace SWSPapp.Services
                 new StatisticBasicModel()
                 {
                     IdPlayer = 1,
-                    PlayerName = "Messi",
+                    PlayerName = "Lionel Messi",
                     Passing = 85,
                     Dribble = 90,
                     Speed = 85,
@@ -55,6 +55,37 @@ namespace SWSPapp.Services
 
                 }).ToList();
             }
+        }
+
+        public List<StatisticBasicModel> GetPlayersInfo()
+        {
+            var list = new List<StatisticBasicModel>()
+            {
+                new StatisticBasicModel()
+                {
+                    IdPlayer = 1,
+                    PlayerName = "Lionel Messi",
+                    Passing = 85,
+                    Dribble = 90,
+                    Speed = 85,
+                    Attack = 89,
+                    Deffence = 67,
+                    Strength = 91
+                },
+                new StatisticBasicModel()
+                {
+                    IdPlayer = 2,
+                    PlayerName = "Cristiano Ronaldo",
+                    Passing = 77,
+                    Dribble = 100,
+                    Speed = 99,
+                    Attack = 94,
+                    Deffence = 64,
+                    Strength = 88
+                }
+            };
+
+            return list;
         }
 
     }
