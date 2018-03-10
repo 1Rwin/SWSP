@@ -172,7 +172,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\StatisticBasicModel.cs" />
-    <Compile Include="Models\PlayerSearchModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Auth.cs" />
@@ -219,13 +218,11 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Session\Login.cshtml" />
     <Content Include="Views\Stats\Index.cshtml" />
     <Content Include="Views\Stats\OldReport.cshtml" />
-    <Content Include="Views\SearchPlayer\SearchPlayer.cshtml" />
     <Content Include="Views\Stats\NewReport.cshtml" />
     <Content Include="Views\Home\Search.cshtml" />
     <Content Include="Views\Shared\_GridPager.cshtml" />

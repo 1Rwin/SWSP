@@ -10,32 +10,25 @@ namespace SWSPapp.Controllers
             return View();
         }
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-            return View();
-        }
-
         [Auth]
         public ActionResult Search()
         {
-            var data = new StatisticsService().GetPlayersInfo();
+            var data = new StatisticsService().GetPlayersInfo(SessionPersister.User.Id);
             return View(data);
         }
 
+        [Auth]
         [HttpPost]
         public void AddFavorite(int idPlayer)
-        {
-            //update favorite
-         
-          
+        {         
+            new StatisticsService().AddPlayerToFavorites(SessionPersister.User.Id, idPlayer);                  
         }
 
+        [Auth]
         [HttpPost]
         public void RemoveFavorite(int idPlayer)
-        {
-            //update favorite 
-
+        {            
+            new StatisticsService().RemovePlayerFromFavorites(SessionPersister.User.Id, idPlayer);
         }
 
     }

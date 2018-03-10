@@ -17,7 +17,7 @@ namespace SWSPapp.Services
             {
                 var hash = Hash(userModel.Password);
                 var user = context.Users.FirstOrDefault(x => x.Login == userModel.Login && x.Password == hash);
-                return new UserModel() { Login = user.Login, Name = user.Name, Role = user.Access };
+                return new UserModel() { Id = user.User_ID, Login = user.Login, Name = user.Name, Role = user.Access };
             }
         }
 

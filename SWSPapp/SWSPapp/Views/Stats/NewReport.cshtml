@@ -12,15 +12,11 @@
             @Html.Label("1-st player", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
                 <select id="firstPlayerlist" class="form-control">
-                    <option value="1">Messi</option>
-                    <option value="2">Ronaldo</option>
                 </select>
             </div>
             @Html.Label("2-nd player", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
                 <select id="secondPlayerlist" class="form-control">
-                    <option value="1">Messi</option>
-                    <option value="2">Ronaldo</option>
                 </select>
             </div>
         </div>
@@ -37,6 +33,21 @@
     <script type="text/javascript">
         var chart = null;
         $(function () {
+
+
+            $.ajax({
+                url: '@Url.Action("GetPlayersForUser", "Stats")',
+                type: "GET",
+                async: false,
+                success: function (response) {
+                    for (var i = 0; i < response.length; i++){
+                        var o1 = new Option(response[i].Name, response[i].IdPlayer);
+                        var o2 = new Option(response[i].Name, response[i].IdPlayer);
+                        $("#firstPlayerlist").append(o1);
+                        $("#secondPlayerlist").append(o2);
+                    }
+                }
+            });
 
             var firstPlayer = { attack: 0, dribbling: 0, speed: 0, passing: 0,deffence: 0, strength: 0 , idP: 0, name: "" };
             var secondPlayer = { attack: 0, dribbling: 0, speed: 0, passing: 0, deffence:0, strength:0, idP: 0, name: "" };
@@ -66,8 +77,8 @@
                             firstPlayer.passing = response.Passing;
                             firstPlayer.strength = response.Strength;
                             firstPlayer.deffence = response.Deffence;
-                            firstPlayer.name = response.PlayerName;
-                   
+                            firstPlayer.name = response.Name;
+
                     }, error: function (xhr) {
                         alert("Coś poszło nie tak")
                     }
@@ -87,7 +98,7 @@
                             secondPlayer.passing = response.Passing;
                             secondPlayer.strength = response.Strength;
                             secondPlayer.deffence = response.Deffence;
-                            secondPlayer.name = response.PlayerName;
+                            secondPlayer.name = response.Name;
 
                     },error: function (xhr) {
                     alert("Coś poszło nie tak")
@@ -99,7 +110,7 @@
                     chart.destroy();
                 }
                 chart = new Chart(ctx, {
-                  
+
                     type: 'radar',
                     data: {
                         labels : ['Attack', 'Dribble', 'Speed', 'Passing', 'Deffence' ,'Strength'],

@@ -10,117 +10,103 @@
 
 <hr />
 
-
-<link href="@Url.Content("~/Scripts/gridmvc.min.js")" rel="stylesheet" />
 <link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="@Url.Content("~/Scripts/gridmvc.min.js")" rel="stylesheet"></script>
 
 <div class="container">
     @Html.Grid(Model).Columns(col =>
-        {
-            col.Add(c => c.IdPlayer).Titled("Id").Filterable(false);
-            col.Add(c => c.PlayerName).Titled("Name").Filterable(true);
-            col.Add(c => c.Passing).Titled("Passing").Filterable(true);
-            col.Add(c => c.Attack).Titled("Attack").Filterable(true);
-            col.Add(c => c.Dribble).Titled("Dribble").Filterable(true);
-            col.Add(c => c.Deffence).Titled("Deffence").Filterable(true);
-            col.Add(c => c.Speed).Titled("Spped").Filterable(true);
-            col.Add(c => c.Strength).Titled("Strength").Filterable(true);
-            col.Add().Titled("Favorite").Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(x => Html.Raw(string.Format("<button type=\"button\" class=\"btn-link glyphicon glyphicon-heart-empty addFav\"")));
-//col.Add().Titled("Favorite").Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(x => Html.Raw(string.Format("<button type=\"button\" class=\"btn-link glyphicon glyphicon-heart remFav\"")));
-//col.Add().Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs(x => Html.ActionLink("Edit", "Edit", new { id = x.IdPlayer }));
+{
+    col.Add(c => c.IdPlayer).Titled("Id").Filterable(false);
+    col.Add(c => c.Name).Titled("Name").Filterable(true);
+    col.Add(c => c.Passing).Titled("Passing").Filterable(true);
+    col.Add(c => c.Attack).Titled("Attack").Filterable(true);
+    col.Add(c => c.Dribble).Titled("Dribble").Filterable(true);
+    col.Add(c => c.Deffence).Titled("Deffence").Filterable(true);
+    col.Add(c => c.Speed).Titled("Spped").Filterable(true);
+    col.Add(c => c.Strength).Titled("Strength").Filterable(true);
+
+    col.Add().Titled("Favorite").Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs
+        (x => x.IsFavorite == 0 ? Html.Raw(string.Format("<button type=\"button\" class=\"btn-link glyphicon glyphicon-heart-empty addFav\"")) : Html.Raw(string.Format("<button type=\"button\" class=\"btn-link glyphicon glyphicon-heart remFav\"")));
 
 })
 </div>
-@section scripts
-{
+@section scripts{
     <script type="text/javascript">
-        $(function () {
-            $(".addFav").click(function () {
-                var selector = this;
-                var idCell = selector.parentElement.parentElement.childNodes[1].innerText;
+        $(document).ready(function () {
 
-                if (selector.classList[3] === "remFav") {
-
-                    $(".remFav").click(function () {
+                $(".remFav").click(function () {
                         var selector = this;
                         var idCell = selector.parentElement.parentElement.childNodes[1].innerText;
+                        var $this = $(this);
+                        if ($this.hasClass("addFav")) {
 
                         $.ajax({
+                            url: '@Url.Action("AddFavorite", "Home")',
+                            type: "POST",
+                            async: false,
+                            data: { idPlayer: idCell },
+                            success: function (response) {
+
+                                $this.removeClass("glyphicon-heart-empty addFav");
+                                $this.addClass("glyphicon-heart remFav");
+
+                            }
+                        });
+                    }
+                    else {
+                            $.ajax({
                             url: '@Url.Action("RemoveFavorite", "Home")',
                             type: "POST",
                             async: false,
                             data: { idPlayer: idCell },
                             success: function (response) {
 
-                                selector.classList.remove("glyphicon-heart");
-                                selector.classList.remove("remFav");
-                                selector.classList.add("glyphicon-heart-empty");
-                                selector.classList.add("addFav");
-                                //selector.attributes("class", "btn-link glyphicon glyphicon-heart remFav");
-                                //$(".addFav").removeClass("btn-link glyphicon glyphicon-heart-empty addFav");
-                                //$(".addFav").addClass("btn-link glyphicon glyphicon-heart remFav");
-                                //$(".addFav").addClass("remFav");
-                                //btn - link glyphicon glyphicon- heart remFav
-                                //location.reload();
+                                $this.removeClass("glyphicon-heart remFav");
+                                $this.addClass("glyphicon-heart-empty addFav");
+
                             }
                         });
-
-
+                    }
                     });
-                }
-                else {
 
-                    $.ajax({
-                        url: '@Url.Action("AddFavorite", "Home")',
-                        type: "POST",
-                        async: false,
-                        data: { idPlayer: idCell },
-                        success: function (response) {
 
-                            //var element = document.getElementById(selector.id);
-                            selector.classList.remove("glyphicon-heart-empty");
-                            selector.classList.remove("addFav");
-                            selector.classList.add("glyphicon-heart");
-                            selector.classList.add("remFav");
-                            //selector.attributes("class", "btn-link glyphicon glyphicon-heart remFav");
-                            //$(".addFav").removeClass("btn-link glyphicon glyphicon-heart-empty addFav");
-                            //$(".addFav").addClass("btn-link glyphicon glyphicon-heart remFav");
-                            //$(".addFav").addClass("remFav");
-                            //btn - link glyphicon glyphicon- heart remFav
-                            //location.reload();
-                        }
-                    });
-                }
-            });
+                 $(".addFav").click(function () {
+                    var selector = this;
+                    var idCell = selector.parentElement.parentElement.childNodes[1].innerText;
+                    var $this = $(this);
 
-            $(".remFav").click(function () {
-                var selector = this;
-                var idCell = selector.parentElement.parentElement.childNodes[1].innerText;
+                    if ($this.hasClass("addFav")) {
 
-                $.ajax({
-                    url: '@Url.Action("RemoveFavorite", "Home")',
-                    type: "POST",
-                    async: false,
-                    data: { idPlayer: idCell },
-                    success: function (response) {
+                        $.ajax({
+                            url: '@Url.Action("AddFavorite", "Home")',
+                            type: "POST",
+                            async: false,
+                            data: { idPlayer: idCell },
+                            success: function (response) {
 
-                        //var element = document.getElementById(selector.id);
-                        selector.classList.remove("glyphicon-heart");
-                        selector.classList.remove("remFav");
-                        selector.classList.add("glyphicon-heart-empty");
-                        selector.classList.add("addFav");
-                        //selector.attributes("class", "btn-link glyphicon glyphicon-heart remFav");
-                        //$(".addFav").removeClass("btn-link glyphicon glyphicon-heart-empty addFav");
-                        //$(".addFav").addClass("btn-link glyphicon glyphicon-heart remFav");
-                        //$(".addFav").addClass("remFav");
-                        //btn - link glyphicon glyphicon- heart remFav
-                        //location.reload();
+                                $this.removeClass("glyphicon-heart-empty addFav");
+                                $this.addClass("glyphicon-heart remFav");
+
+                            }
+                        });
+                    }
+                    else {
+                            $.ajax({
+                            url: '@Url.Action("RemoveFavorite", "Home")',
+                            type: "POST",
+                            async: false,
+                            data: { idPlayer: idCell },
+                            success: function (response) {
+
+                                $this.removeClass("glyphicon-heart remFav");
+                                $this.addClass("glyphicon-heart-empty addFav");
+
+                            }
+                        });
                     }
                 });
-
-            });
-
         });
     </script>
-
 }

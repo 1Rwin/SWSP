@@ -2,6 +2,7 @@
 using SWSPapp.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace SWSPapp.Services
@@ -10,33 +11,47 @@ namespace SWSPapp.Services
     {
         public StatisticBasicModel GetReportForPlayer(int idPlayer)
         {
-            var list = new  List<StatisticBasicModel>()
+            List<StatisticBasicModel> list = null;
+            using (SWSPContext context = new SWSPContext())
             {
-                new StatisticBasicModel()
-                {
-                    IdPlayer = 1,
-                    PlayerName = "Lionel Messi",
-                    Passing = 85,
-                    Dribble = 90,
-                    Speed = 85,
-                    Attack = 89,
-                    Deffence = 67,
-                    Strength = 91
-                },
-                new StatisticBasicModel()
-                {
-                    IdPlayer = 2,
-                    PlayerName = "Cristiano Ronaldo",
-                    Passing = 77,
-                    Dribble = 100,
-                    Speed = 99,
-                    Attack = 94,
-                    Deffence = 64,
-                    Strength = 88
-                }
-            };
+                list = context.Database.SqlQuery<StatisticBasicModel>("exec [dbo].[GetPlayersForUser] @userId", new SqlParameter("@userId", SessionPersister.User.Id)).ToList();              
+            }
 
             return list.FirstOrDefault(x => x.IdPlayer == idPlayer);
+        }
+
+        public List<StatisticBasicModel> GetPlayersForUser()
+        {
+            using (SWSPContext context = new SWSPContext())
+            {
+                return context.Database.SqlQuery<StatisticBasicModel>("exec [dbo].[GetPlayersForUser] @userId", new SqlParameter("@userId", SessionPersister.User.Id)).Where(x=>x.IsFavorite == 1).ToList();
+            }
+        }
+
+        internal void AddPlayerToFavorites(int idUser, int idPlayer)
+        {
+            using (SWSPContext context = new SWSPContext())
+            {
+                context.Database.ExecuteSqlCommand("exec [dbo].[AddPlayerToFavorite] @userId, @playerId", new SqlParameter("@userId", idUser), new SqlParameter("@playerId",idPlayer));
+                
+            }
+        }
+
+        internal void RemovePlayerFromFavorites(int idUser, int idPlayer)
+        {
+            using (SWSPContext context = new SWSPContext())
+            {
+                context.Database.ExecuteSqlCommand("exec [dbo].[RemovePlayerFromFavorite] @userId, @playerId", new SqlParameter("@userId", idUser), new SqlParameter("@playerId", idPlayer));
+            }
+        }
+
+        public List<StatisticBasicModel> GetPlayersInfo(int id)
+        {
+            using (SWSPContext context = new SWSPContext())
+            {
+                var data = context.Database.SqlQuery<StatisticBasicModel>("exec [dbo].[GetPlayersForUser] @userId", new SqlParameter("@userId", id)).ToList();
+                return data;
+            }               
         }
 
         public List <StatisticBasicModel> GetReportForPlayerLineChart(int idPlayer)
@@ -50,43 +65,11 @@ namespace SWSPapp.Services
                     Passing = x.passing.Value,
                     Dribble = x.dribble.Value,
                     Speed = x.speed.Value,
-                    Attack = x.attack.Value,
-                    Date = x.date.Value
+                    Date = x.date.Value,
+                    Attack = x.attack.Value,                  
 
                 }).ToList();
             }
-        }
-
-        public List<StatisticBasicModel> GetPlayersInfo()
-        {
-            var list = new List<StatisticBasicModel>()
-            {
-                new StatisticBasicModel()
-                {
-                    IdPlayer = 1,
-                    PlayerName = "Lionel Messi",
-                    Passing = 85,
-                    Dribble = 90,
-                    Speed = 85,
-                    Attack = 89,
-                    Deffence = 67,
-                    Strength = 91
-                },
-                new StatisticBasicModel()
-                {
-                    IdPlayer = 2,
-                    PlayerName = "Cristiano Ronaldo",
-                    Passing = 77,
-                    Dribble = 100,
-                    Speed = 99,
-                    Attack = 94,
-                    Deffence = 64,
-                    Strength = 88
-                }
-            };
-
-            return list;
-        }
-
+        }     
     }
 }

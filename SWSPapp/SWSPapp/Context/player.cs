@@ -41,6 +41,18 @@ namespace SWSPapp.Context
 
         public int id_position { get; set; }
 
+        public int attack { get; set; }
+
+        public int dribble { get; set; }
+
+        public int deffence { get; set; }
+
+        public int speed { get; set; }
+
+        public int strength { get; set; }
+
+        public int passing { get; set; }
+
         public virtual dic_city dic_city { get; set; }
 
         public virtual dic_country dic_country { get; set; }

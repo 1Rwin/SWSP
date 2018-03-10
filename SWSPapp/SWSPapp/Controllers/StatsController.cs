@@ -15,6 +15,15 @@ namespace SWSPapp.Controllers
         {
             return View();
         }
+
+        [Auth]
+        [HttpGet]
+        public JsonResult GetPlayersForUser()
+        {
+            var data = new StatisticsService().GetPlayersForUser();
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
         [Auth]
         [HttpGet]
         public JsonResult GetStats2(int idPlayer = 1)
