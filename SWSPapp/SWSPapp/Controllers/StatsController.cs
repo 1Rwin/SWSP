@@ -1,22 +1,16 @@
 ﻿using SWSPapp.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace SWSPapp.Controllers
 {
+    [Auth]
     public class StatsController : Controller
-    {
-        // GET: Stats
-        [Auth]
+    {              
         public ActionResult Index()
         {
             return View();
         }
 
-        [Auth]
         [HttpGet]
         public JsonResult GetPlayersForUser()
         {
@@ -24,28 +18,27 @@ namespace SWSPapp.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        [Auth]
         [HttpGet]
-        public JsonResult GetStats2(int idPlayer = 1)
+        public JsonResult GetStatsLineChart(int idPlayer)
         {
             var data = new StatisticsService().GetReportForPlayerLineChart(idPlayer);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
-
-        [Auth]
+ 
         [HttpGet]
-        public JsonResult GetStats(int idPlayer = 1)
+        public JsonResult GetStats(int idPlayer)
         {
             var data = new StatisticsService().GetReportForPlayer(idPlayer);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        [Auth]
+        [HttpGet]
         public ActionResult NewReport()
         {
             return View();
         }
 
+        [HttpGet]
         public ActionResult OldReport()
         {
             return View();
