@@ -1,0 +1,163 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <br />
+    <h2>Statystyka</h2>
+    <br />
+
+    <div class="form-horizontal">
+        <div class="row">
+            @Html.Label("1-st player", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                <select id="firstPlayerlist" class="form-control">
+                </select>
+            </div>
+            @Html.Label("2-nd player", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                <select id="secondPlayerlist" class="form-control">
+                </select>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="col-md-offset-3">
+        <canvas id="myChart" height="500" width="500"></canvas>
+    </div>
+</div>
+
+@section scripts
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script type="text/javascript">
+        var chart = null;
+        $(function () {
+
+
+            $.ajax({
+                url: '@Url.Action("GetPlayersForUser", "Stats")',
+                type: "GET",
+                async: false,
+                success: function (response) {
+                    for (var i = 0; i < response.length; i++){
+                        var o1 = new Option(response[i].Name, response[i].IdPlayer);
+                        var o2 = new Option(response[i].Name, response[i].IdPlayer);
+                        $("#firstPlayerlist").append(o1);
+                        $("#secondPlayerlist").append(o2);
+                    }
+                }
+            });
+
+            var firstPlayer = { attack: 0, dribbling: 0, speed: 0, passing: 0,deffence: 0, strength: 0 , idP: 0, name: "" };
+            var secondPlayer = { attack: 0, dribbling: 0, speed: 0, passing: 0, deffence:0, strength:0, idP: 0, name: "" };
+
+            getPlayerStats($("#firstPlayerlist").val(), $("#secondPlayerlist").val());
+
+            $("#firstPlayerlist").change(function () {
+                getPlayerStats($("#firstPlayerlist").val(), $("#secondPlayerlist").val());
+            });
+
+            $("#secondPlayerlist").change(function () {
+                getPlayerStats($("#firstPlayerlist").val(),$("#secondPlayerlist").val());
+            });
+
+            function getPlayerStats(idPlayer, ndPlayer) {
+                $.ajax({
+                    url: '@Url.Action("GetStatsRadar", "Stats")',
+                    type: "GET",
+                    async: false,
+                    data: { idPlayer: idPlayer },
+                    success: function (response) {
+
+                            firstPlayer.idP = idPlayer;
+                            firstPlayer.attack = response.Attack;
+                            firstPlayer.dribbling = response.Dribble;
+                            firstPlayer.speed = response.Speed;
+                            firstPlayer.passing = response.Passing;
+                            firstPlayer.strength = response.Strength;
+                            firstPlayer.deffence = response.Deffence;
+                            firstPlayer.name = response.Name;
+
+                    }, error: function (xhr) {
+                        alert("Coś poszło nie tak")
+                    }
+                });
+
+                $.ajax({
+                    url: '@Url.Action("GetStatsRadar", "Stats")',
+                    type: "GET",
+                    async: false,
+                    data: { idPlayer: ndPlayer },
+                    success: function (response) {
+
+                            secondPlayer.idP = ndPlayer;
+                            secondPlayer.attack = response.Attack;
+                            secondPlayer.dribbling = response.Dribble;
+                            secondPlayer.speed = response.Speed;
+                            secondPlayer.passing = response.Passing;
+                            secondPlayer.strength = response.Strength;
+                            secondPlayer.deffence = response.Deffence;
+                            secondPlayer.name = response.Name;
+
+                    },error: function (xhr) {
+                    alert("Coś poszło nie tak")
+                    }
+                });
+
+                var ctx = document.getElementById('myChart').getContext('2d');
+                if (chart != null) {
+                    chart.destroy();
+                }
+                chart = new Chart(ctx, {
+
+                    type: 'radar',
+                    data: {
+                        labels : ['Attack', 'Dribble', 'Speed', 'Passing', 'Deffence' ,'Strength'],
+                        datasets: [
+                            {
+                                label: firstPlayer.name,
+                                backgroundColor: "transparent",
+                                borderColor: "rgba(200,0,0,0.6)",
+                                fill: false,
+                                radius: 6,
+                                pointRadius: 6,
+                                pointBorderWidth: 3,
+                                pointBackgroundColor: "orange",
+                                pointBorderColor: "rgba(200,0,0,0.6)",
+                                pointHoverRadius: 10,
+                                data: [firstPlayer.attack, firstPlayer.dribbling, firstPlayer.passing, firstPlayer.speed, firstPlayer.deffence, firstPlayer.strength]
+                            },
+                            {
+                                label: secondPlayer.name,
+                                backgroundColor: "transparent",
+                                borderColor: "rgba(50,0,0,0.6)",
+                                fill: false,
+                                radius: 6,
+                                pointRadius: 6,
+                                pointBorderWidth: 3,
+                                pointBackgroundColor: "orange",
+                                pointBorderColor: "rgba(50,0,0,0.6)",
+                                pointHoverRadius: 10,
+                                data: [secondPlayer.attack, secondPlayer.dribbling, secondPlayer.passing, secondPlayer.speed, secondPlayer.deffence, secondPlayer.strength]
+                            }
+                        ]
+                    },
+                    options: {
+                        pointDot: false,
+                        showTooltips: false,
+                        scaleOverride: true,
+                        scaleSteps: 4,
+                        scaleStepWidth: 5,
+                        scaleStartValue: 0,
+                        responsive: false,
+                        scale: {
+                            display: true
+                        }
+                    }
+            });
+          }
+
+        });
+    </script>
+}

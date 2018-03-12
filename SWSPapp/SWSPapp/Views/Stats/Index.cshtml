@@ -19,18 +19,17 @@
 <div class="container">
 
     @*<a class="btn btn-primary btn-lg btn-block" href="@Url.Action("OldReport")">Old report</a>*@
-
-
     <h2>Statystyka - zmiana parametrów w czasie</h2>
     <br />
 
-    <div class="row">      
+    <div class="row">
         <div class="col-md-2">
             <select id="playerList" class="form-control"></select>
         </div>
     </div>
     <canvas id="myChart"></canvas>
-
+    <br/>
+    <a class="btn btn-primary" id="export">Export to excel</a>
 </div>
 
 @section scripts
@@ -64,6 +63,23 @@
                 getDataForChart(playerListValue);
             });
 
+            $("#export").click(function () {
+                GetExcelReport(playerListValue);
+            });
+
+            function GetExcelReport(idPlayer) {
+             
+                    $.ajax({
+                        url: '@Url.Action("ExportToExcel", "Stats")',
+                        type: "POST",
+                        data: { idPlayer: idPlayer },
+                        success: function (data) {                           
+                            window.location = '/Stats/Download?fileGuid=' + data.FileGuid
+                                + '&filename=' + data.FileName;
+                        }
+                    });               
+            }
+
             function getDataForChart(idPlayer) {
                 $.ajax({
                     url: '@Url.Action("GetStatsLineChart", "Stats")',
@@ -82,7 +98,12 @@
                             var fullDate = new Date(parseInt(response[i].Date.substr(6)));
                             var month = fullDate.getMonth() + 1;
                             var year = fullDate.getFullYear();
-                            dates.push(year + "/" + month);
+                            if (month > 9) {
+                                dates.push(year + "/" + month);
+                            }
+                            else {
+                                dates.push(year + "/0" + month);
+                            }
                             attackData.push(response[i].Attack);
                             dribblingData.push(response[i].Dribble);
                             speedData.push(response[i].Speed);
