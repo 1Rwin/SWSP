@@ -1,16 +1,11 @@
 ﻿using SWSPapp.Models;
 using SWSPapp.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace SWSPapp.Controllers
 {
     public class SessionController : Controller
-    {
-        // GET: Session
+    {     
         public ActionResult Login()
         {
             return View();
@@ -22,11 +17,11 @@ namespace SWSPapp.Controllers
 
             if (ModelState.IsValid)
             {
-                var user = LoginService.Log_In(userModel);
+                var user = LoginService.SignIn(userModel);
                 if (user != null)
                 {
                     SessionPersister.User = user;
-                    return RedirectToAction("Index", "Stats");
+                    return RedirectToAction("Search", "Home");
                 }  
                 else
                 {

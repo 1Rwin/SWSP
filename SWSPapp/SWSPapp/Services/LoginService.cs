@@ -8,7 +8,7 @@ namespace SWSPapp.Services
 {
     public class LoginService
     {
-        public static UserModel Log_In(UserModel userModel)
+        public static UserModel SignIn(UserModel userModel)
         {
             using (SWSPContext context = new SWSPContext())
             {

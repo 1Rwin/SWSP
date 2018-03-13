@@ -29,7 +29,7 @@
     </div>
     <canvas id="myChart"></canvas>
     <br/>
-    <a class="btn btn-primary" id="export">Export to excel</a>
+    <a class="btn btn-success" id="export">Export to excel</a>
 </div>
 
 @section scripts
@@ -54,7 +54,7 @@
 
              playerListValue = $("#playerList").val();
 
-            if (playerListValue != "") {
+            if (playerListValue != null) {
                 getDataForChart(playerListValue);
             }
 

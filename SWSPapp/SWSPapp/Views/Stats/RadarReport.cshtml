@@ -50,8 +50,9 @@
             var firstPlayer = { attack: 0, dribbling: 0, speed: 0, passing: 0,deffence: 0, strength: 0 , idP: 0, name: "" };
             var secondPlayer = { attack: 0, dribbling: 0, speed: 0, passing: 0, deffence:0, strength:0, idP: 0, name: "" };
 
-            getPlayerStats($("#firstPlayerlist").val(), $("#secondPlayerlist").val());
-
+            if ($("#firstPlayerlist").val() != null && $("#secondPlayerlist").val() != null) {
+                getPlayerStats($("#firstPlayerlist").val(), $("#secondPlayerlist").val());
+            }
             $("#firstPlayerlist").change(function () {
                 getPlayerStats($("#firstPlayerlist").val(), $("#secondPlayerlist").val());
             });
