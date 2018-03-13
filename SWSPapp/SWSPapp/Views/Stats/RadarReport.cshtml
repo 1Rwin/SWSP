@@ -33,8 +33,6 @@
     <script type="text/javascript">
         var chart = null;
         $(function () {
-
-
             $.ajax({
                 url: '@Url.Action("GetPlayersForUser", "Stats")',
                 type: "GET",
@@ -142,7 +140,8 @@
                                 data: [secondPlayer.attack, secondPlayer.dribbling, secondPlayer.passing, secondPlayer.speed, secondPlayer.deffence, secondPlayer.strength]
                             }
                         ]
-                    },
+                    }
+                    ,
                     options: {
                         pointDot: false,
                         showTooltips: false,

@@ -187,7 +187,6 @@
     <Compile Include="Context\SWSPContext.cs" />
     <Compile Include="Context\User.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\SearchPlayerController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\StatsController.cs" />
     <Compile Include="Global.asax.cs">
@@ -202,7 +201,6 @@
     <Compile Include="Services\StatisticsService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Gridmvc.css" />
     <Content Include="favicon.ico" />
@@ -248,6 +246,7 @@
     <Content Include="Views\Home\Search.cshtml" />
     <Content Include="Views\Shared\_GridPager.cshtml" />
     <Content Include="Views\Shared\_Grid.cshtml" />
+    <Content Include="Views\Session\LostPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

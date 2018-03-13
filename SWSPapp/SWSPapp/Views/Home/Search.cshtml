@@ -18,17 +18,17 @@
 <div class="container">
     @Html.Grid(Model).Columns(col =>
     {
-        col.Add(c => c.IdPlayer).Titled("Id").Filterable(false);
-        col.Add(c => c.Name).Titled("Name").Filterable(true);
+        col.Add().Titled(" ").Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs
+       (x => x.IsFavorite == 0 ? Html.Raw(string.Format("<button type=\"button\" class=\"btn-link glyphicon glyphicon-heart-empty addFav\"")) : Html.Raw(string.Format("<button type=\"button\" class=\"btn-link glyphicon glyphicon-heart remFav\"")));
+
+        col.Add(c => c.IdPlayer).Titled("Id").Filterable(false).Sortable(true);
+        col.Add(c => c.Name).Titled("Name").Filterable(true).Sortable(true);
         col.Add(c => c.Passing).Titled("Passing").Filterable(true);
         col.Add(c => c.Attack).Titled("Attack").Filterable(true);
         col.Add(c => c.Dribble).Titled("Dribble").Filterable(true);
         col.Add(c => c.Deffence).Titled("Deffence").Filterable(true);
         col.Add(c => c.Speed).Titled("Spped").Filterable(true);
         col.Add(c => c.Strength).Titled("Strength").Filterable(true);
-
-        col.Add().Titled("Favorite").Encoded(false).Sanitized(false).SetWidth(30).RenderValueAs
-            (x => x.IsFavorite == 0 ? Html.Raw(string.Format("<button type=\"button\" class=\"btn-link glyphicon glyphicon-heart-empty addFav\"")) : Html.Raw(string.Format("<button type=\"button\" class=\"btn-link glyphicon glyphicon-heart remFav\"")));
 
     })
 </div>
@@ -38,7 +38,7 @@
 
                 $(".remFav").click(function () {
                         var selector = this;
-                        var idCell = selector.parentElement.parentElement.childNodes[1].innerText;
+                        var idCell = selector.parentElement.parentElement.childNodes[2].innerText;
                         var $this = $(this);
                         if ($this.hasClass("addFav")) {
 
@@ -65,16 +65,14 @@
 
                                 $this.removeClass("glyphicon-heart remFav");
                                 $this.addClass("glyphicon-heart-empty addFav");
-
                             }
                         });
                     }
-                    });
-
+                 });
 
                  $(".addFav").click(function () {
                     var selector = this;
-                    var idCell = selector.parentElement.parentElement.childNodes[1].innerText;
+                    var idCell = selector.parentElement.parentElement.childNodes[2].innerText;
                     var $this = $(this);
 
                     if ($this.hasClass("addFav")) {
@@ -85,10 +83,8 @@
                             async: false,
                             data: { idPlayer: idCell },
                             success: function (response) {
-
                                 $this.removeClass("glyphicon-heart-empty addFav");
                                 $this.addClass("glyphicon-heart remFav");
-
                             }
                         });
                     }
@@ -99,10 +95,8 @@
                             async: false,
                             data: { idPlayer: idCell },
                             success: function (response) {
-
                                 $this.removeClass("glyphicon-heart remFav");
                                 $this.addClass("glyphicon-heart-empty addFav");
-
                             }
                         });
                     }

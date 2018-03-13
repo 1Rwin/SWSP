@@ -19,23 +19,36 @@ namespace SWSPapp.Controllers
         [HttpPost]
         public ActionResult Login(UserModel userModel)
         {
-            var user = LoginService.Log_In(userModel);
-            if(user != null)
+
+            if (ModelState.IsValid)
             {
-                SessionPersister.User = user;
-                return RedirectToAction("Index", "Stats");
+                var user = LoginService.Log_In(userModel);
+                if (user != null)
+                {
+                    SessionPersister.User = user;
+                    return RedirectToAction("Index", "Stats");
+                }  
+                else
+                {
+                    ViewBag.Error = "Niepoprawne dane logowania";
+                    return View(userModel);
+                }
             }
             else
-            {
-                ViewBag.Error = "Niepoprawne dane logowania";
-                return View(user);
+            {               
+                return View(userModel);
             }
-           
+
         }
         public ActionResult Logout()
         {
             SessionPersister.User = null;
             return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult LostPassword()
+        {
+            return View();
         }
 
 
