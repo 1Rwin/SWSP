@@ -21,7 +21,7 @@ namespace SWSPapp.Controllers
                 if (user != null)
                 {
                     SessionPersister.User = user;
-                    return RedirectToAction("Search", "Home");
+                    return RedirectToAction("BasePage", "Home");
                 }  
                 else
                 {
@@ -38,7 +38,7 @@ namespace SWSPapp.Controllers
         public ActionResult Logout()
         {
             SessionPersister.User = null;
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("BasePage", "Home");
         }
 
         public ActionResult LostPassword()

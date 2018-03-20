@@ -11,6 +11,12 @@ namespace SWSPapp.Controllers
         }
 
         [Auth]
+        public ActionResult BasePage()
+        {
+            return View();
+        }
+
+        [Auth]
         public ActionResult Search()
         {
             var data = new StatisticsService().GetPlayersInfo(SessionPersister.User.Id);
@@ -29,6 +35,12 @@ namespace SWSPapp.Controllers
         public void RemoveFavorite(int idPlayer)
         {            
             new StatisticsService().RemovePlayerFromFavorites(SessionPersister.User.Id, idPlayer);
+        }
+
+        [Auth]
+        public ActionResult About()
+        {
+            return View();
         }
 
     }
