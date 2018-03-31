@@ -3,22 +3,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@*<div class="=" container">
-        <a class="btn btn-primary" href="stats/NewReport" role="button">Nowy raport</a>
-        @*<a class="btn btn-primary" href="SearchPlayer/SearchPlayer" role="button">Wyszukaj zawodnika</a>
-    </div>
-*@
-
-@*@<br/>
-    <br/>
-    <div class="=" container">
-        <a class="btn btn-primary" href="stats/OldReport" role="button">Historia Raportów</a>
-    </div>
-*@
-
 <div class="container">
-
-    @*<a class="btn btn-primary btn-lg btn-block" href="@Url.Action("OldReport")">Old report</a>*@
     <h2>Statystyka - zmiana parametrów w czasie</h2>
     <br />
 
@@ -28,138 +13,156 @@
         </div>
     </div>
     <canvas id="myChart"></canvas>
-    <br/>
+    <br />
     <a class="btn btn-success" id="export">Export to excel</a>
 </div>
 
 @section scripts
 {
+    <script src="~/Scripts/jquery.signalR-2.2.3.js"></script>
+    <script src="~/signalr/hubs" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     <script type="text/javascript">
         var chart = null;
         var playerListValue = "";
         $(function () {
-
+            //Get data for dropdown list
             $.ajax({
                 url: '@Url.Action("GetPlayersForUser", "Stats")',
                 type: "GET",
                 async: false,
                 success: function (response) {
-                    for (var i = 0; i < response.length; i++){
+                    for (var i = 0; i < response.length; i++) {
                         var o = new Option(response[i].Name, response[i].IdPlayer);
                         $("#playerList").append(o);
                     }
                 }
             });
 
-             playerListValue = $("#playerList").val();
+            //SignalR Proxy created on the fly
+            var info = $.connection.jobHub;
 
-            if (playerListValue != null) {
-                getDataForChart(playerListValue);
-            }
+            //attach callback for service broker notification
+            info.client.changeEntity = function (callbackData) {
+                console.log("update has be done");
+                playerListValue = $("#playerList").val();
+                if (playerListValue != null) {
+                    info.server.getReportForPlayer(playerListValue).done(function (data) {
+                        getDataForChartCallback(data);
+                    })
+                }
+            };
 
+            //init signalR hub
+            $.connection.hub.start().done(function () {
+               playerListValue = $("#playerList").val();
+               if (playerListValue != null) {
+                   info.server.getReportForPlayer(playerListValue)
+                       .done(function (data) {
+                              getDataForChartCallback(data);
+                        })
+                 }
+            });
+
+       
             $("#playerList").change(function () {
                 playerListValue = $("#playerList").val();
-                getDataForChart(playerListValue);
+                if (playerListValue != null) {
+                    info.server.getReportForPlayer(playerListValue)
+                        .done(function (data) {
+                            getDataForChartCallback(data);
+                        })
+                }
             });
 
             $("#export").click(function () {
                 GetExcelReport(playerListValue);
             });
 
+            //Functions
             function GetExcelReport(idPlayer) {
-             
-                    $.ajax({
-                        url: '@Url.Action("ExportToExcel", "Stats")',
-                        type: "POST",
-                        data: { idPlayer: idPlayer },
-                        success: function (data) {                           
-                            window.location = '/Stats/Download?fileGuid=' + data.FileGuid
-                                + '&filename=' + data.FileName;
-                        }
-                    });               
+
+                $.ajax({
+                    url: '@Url.Action("ExportToExcel", "Stats")',
+                    type: "POST",
+                    data: { idPlayer: idPlayer },
+                    success: function (data) {
+                        window.location = '/Stats/Download?fileGuid=' + data.FileGuid
+                            + '&filename=' + data.FileName;
+                    }
+                });
             }
 
-            function getDataForChart(idPlayer) {
-                $.ajax({
-                    url: '@Url.Action("GetStatsLineChart", "Stats")',
-                    type: "GET",
-                    data: { idPlayer: idPlayer },
-                    success: function (response) {
+            function getDataForChartCallback(calbackData) {
 
-                        var dates = [];
-                        var attackData = [];
-                        var dribblingData = [];
-                        var speedData = [];
-                        var passingData = [];
+                var dates = [];
+                var attackData = [];
+                var dribblingData = [];
+                var speedData = [];
+                var passingData = [];
 
-                        for (i = 0; i < response.length; i++) {
+                for (i = 0; i < calbackData.length; i++) {
 
-                            var fullDate = new Date(parseInt(response[i].Date.substr(6)));
-                            var month = fullDate.getMonth() + 1;
-                            var year = fullDate.getFullYear();
-                            if (month > 9) {
-                                dates.push(year + "/" + month);
-                            }
-                            else {
-                                dates.push(year + "/0" + month);
-                            }
-                            attackData.push(response[i].Attack);
-                            dribblingData.push(response[i].Dribble);
-                            speedData.push(response[i].Speed);
-                            passingData.push(response[i].Passing);
-                        }
-
-                        var ctx = document.getElementById('myChart').getContext('2d');
-
-                        if (chart != null) {
-                            chart.destroy();
-                        }
-                        chart = new Chart(ctx, {
-                            // The type of chart we want to create
-                            type: 'line',
-
-                            // The data for our dataset
-                            data: {
-                                labels: dates,
-                                datasets: [
-                                    {
-                                        label: "Attack",
-                                        fill: false,
-                                        lineTension: 0,
-                                        borderColor: 'rgb(255, 99, 132)',
-                                        data: attackData,
-                                    },
-                                    {
-                                        label: "Dribble",
-                                        fill: false,
-                                        lineTension: 0,
-                                        borderColor: 'rgb(100, 50, 123)',
-                                        data: dribblingData,
-                                    },
-                                    {
-                                        label: "Speed",
-                                        fill: false,
-                                        lineTension: 0,
-                                        borderColor: 'rgb(50, 100, 123)',
-                                        data: speedData,
-                                    },
-                                    {
-                                        label: "Passing",
-                                        fill: false,
-                                        lineTension: 0,
-                                        borderColor: 'rgb(10, 45, 123)',
-                                        data: passingData,
-                                    }
-                                ]
-                            },
-                            // Configuration options go here
-                            options: {}
-                        });
-                    },
-                    error: function (xhr) {
-                        alert("Coś poszło nie tak")
+                    var fullDate = new Date(parseInt(calbackData[i].Date.substr(6)));
+                    var month = fullDate.getMonth() + 1;
+                    var year = fullDate.getFullYear();
+                    if (month > 9) {
+                        dates.push(year + "/" + month);
                     }
+                    else {
+                        dates.push(year + "/0" + month);
+                    }
+                    attackData.push(calbackData[i].Attack);
+                    dribblingData.push(calbackData[i].Dribble);
+                    speedData.push(calbackData[i].Speed);
+                    passingData.push(calbackData[i].Passing);
+                }
+
+                var ctx = document.getElementById('myChart').getContext('2d');
+
+                if (chart != null) {
+                    chart.destroy();
+                }
+                chart = new Chart(ctx, {
+                    // The type of chart we want to create
+                    type: 'line',
+
+                    // The data for our dataset
+                    data: {
+                        labels: dates,
+                        datasets: [
+                            {
+                                label: "Attack",
+                                fill: false,
+                                lineTension: 0,
+                                borderColor: 'rgb(255, 99, 132)',
+                                data: attackData,
+                            },
+                            {
+                                label: "Dribble",
+                                fill: false,
+                                lineTension: 0,
+                                borderColor: 'rgb(100, 50, 123)',
+                                data: dribblingData,
+                            },
+                            {
+                                label: "Speed",
+                                fill: false,
+                                lineTension: 0,
+                                borderColor: 'rgb(50, 100, 123)',
+                                data: speedData,
+                            },
+                            {
+                                label: "Passing",
+                                fill: false,
+                                lineTension: 0,
+                                borderColor: 'rgb(10, 45, 123)',
+                                data: passingData,
+                            }
+                        ]
+                    },
+                    // Configuration options go here
+                    options: {}
                 });
             }
         });

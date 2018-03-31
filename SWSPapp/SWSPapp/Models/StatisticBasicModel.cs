@@ -5,6 +5,7 @@ namespace SWSPapp.Models
 {
     public class StatisticBasicModel
     {
+        public int Id { get; set; }
         public int IdPlayer { get; set; }       
         public int Speed { get; set; }
         public int Attack { get; set; }
@@ -13,6 +14,8 @@ namespace SWSPapp.Models
         public int Deffence { get; set; }
         public int Strength { get; set; }
         public string Name { get;  set; }
+
+        [NotMapped]
         public int IsFavorite { get; set; }
 
         [NotMapped]
