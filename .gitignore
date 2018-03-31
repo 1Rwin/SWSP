@@ -116,3 +116,17 @@
 /SWSPapp/SWSPapp/bin/FastMember.Signed.dll
 /SWSPapp/SWSPapp/bin/System.IO.FileSystem.Primitives.dll
 /SWSPapp/SWSPapp/bin/System.IO.Packaging.dll
+/SWSPapp/SWSPapp/bin/Microsoft.AspNet.SignalR.Core.dll
+/SWSPapp/SWSPapp/bin/Microsoft.AspNet.SignalR.Core.xml
+/SWSPapp/SWSPapp/bin/Microsoft.AspNet.SignalR.SystemWeb.dll
+/SWSPapp/SWSPapp/bin/Microsoft.AspNet.SignalR.SystemWeb.xml
+/SWSPapp/SWSPapp/bin/Microsoft.Owin.Host.SystemWeb.dll
+/SWSPapp/SWSPapp/bin/Microsoft.Owin.Host.SystemWeb.xml
+/SWSPapp/SWSPapp/bin/Microsoft.Owin.Security.dll
+/SWSPapp/SWSPapp/bin/Microsoft.Owin.Security.xml
+/SWSPapp/SWSPapp/bin/Microsoft.Owin.dll
+/SWSPapp/SWSPapp/bin/Microsoft.Owin.xml
+/SWSPapp/SWSPapp/bin/Owin.dll
+/SWSPapp/SWSPapp/bin/TableDependency.SqlClient.dll
+/SWSPapp/SWSPapp/bin/TableDependency.dll
+/SWSPapp/SWSPapp/obj/Release/SWSPapp.csproj.CoreCompileInputs.cache

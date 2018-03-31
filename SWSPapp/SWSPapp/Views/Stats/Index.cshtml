@@ -101,17 +101,9 @@
                 var speedData = [];
                 var passingData = [];
 
-                for (i = 0; i < calbackData.length; i++) {
+                for (i = 0; i < calbackData.length; i++) {               
 
-                    var fullDate = new Date(parseInt(calbackData[i].Date.substr(6)));
-                    var month = fullDate.getMonth() + 1;
-                    var year = fullDate.getFullYear();
-                    if (month > 9) {
-                        dates.push(year + "/" + month);
-                    }
-                    else {
-                        dates.push(year + "/0" + month);
-                    }
+                    dates.push(calbackData[i].Date.substr(0,7));
                     attackData.push(calbackData[i].Attack);
                     dribblingData.push(calbackData[i].Dribble);
                     speedData.push(calbackData[i].Speed);
