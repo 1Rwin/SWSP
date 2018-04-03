@@ -1,9 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Owin;
+﻿using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartup(typeof(SWSPapp.Startup))]
+[assembly: OwinStartup(startupType: typeof(SWSPapp.Startup))]
 
 namespace SWSPapp
 {

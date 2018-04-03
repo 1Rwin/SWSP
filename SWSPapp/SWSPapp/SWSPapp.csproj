@@ -210,6 +210,7 @@
     <Compile Include="Context\player_statistic_changes.cs" />
     <Compile Include="Context\SWSPContext.cs" />
     <Compile Include="Context\User.cs" />
+    <Compile Include="Controllers\ExcelController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\StatsController.cs" />

@@ -83,11 +83,11 @@
             function GetExcelReport(idPlayer) {
 
                 $.ajax({
-                    url: '@Url.Action("ExportToExcel", "Stats")',
+                    url: '@Url.Action("ExportToExcel", "Excel")',
                     type: "POST",
                     data: { idPlayer: idPlayer },
                     success: function (data) {
-                        window.location = '/Stats/Download?fileGuid=' + data.FileGuid
+                        window.location = '/Excel/Download?fileGuid=' + data.FileGuid
                             + '&filename=' + data.FileName;
                     }
                 });
